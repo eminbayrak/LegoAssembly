@@ -17,12 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 const Construction = (name) => {
     const [constructionID, setConstructionID] = React.useState('')
-    const [construction, setConstruction] = React.useState({
-        part_a: 0,
-        part_b: 0,
-        part_c: 0,
-        total_count: 0
-    });
+    const [construction, setConstruction] = React.useState({});
     const classes = useStyles();
 
     // TODO: Once be able to get the construction properties, we can pass it here

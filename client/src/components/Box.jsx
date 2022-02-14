@@ -12,56 +12,28 @@ const style = {
     cursor: "move"
 };
 const Box = ({ name, index }) => {
-    const [partCounts, setPartCounts] = React.useState({
-        part_a: 0,
-        part_b: 0,
-        part_c: 0,
-        total_count: 0
-    });
+    const [counters, setCounters] = React.useState([0, 0, 0, 0, 0]);
+    const sum = counters.reduce((acc, item) => acc + item, 0);
     
     const onDropped = (constructionID) => {
         const constructionData = {
-            part_a: partCounts.part_a,
-            part_b: partCounts.part_b,
-            part_c: partCounts.part_c,
-            total_count: partCounts.totalCount,
+            part_a: counters[0],
+            part_b: counters[1],
+            part_c: counters[2],
+            total_count: sum,
         }
         addToConstruction(constructionID, constructionData)
     }
-
     const [{ isDragging }, drag] = useDrag({
         item: { name, type: ItemTypes.BOX },
         end: (item, monitor) => {
             const dropResult = monitor.getDropResult();
             if (item && dropResult) {
-                if (index === 0) {
-                    setPartCounts({
-                        part_a: partCounts.part_a + 1, 
-                        part_b: partCounts.part_b, 
-                        part_c: partCounts.part_c, 
-                        total_count: partCounts.total_count + 1
-                    });
-                } 
-                if (index === 1) {
-                    setPartCounts({
-                        part_b: partCounts.part_b + 1,
-                        part_a: partCounts.part_a,
-                        part_c: partCounts.part_c,
-                        total_count: partCounts.total_count + 1
-                    })
-                }
-                if (index === 2) {
-                    setPartCounts({
-                        part_c: partCounts.part_c + 1, 
-                        part_a: partCounts.part_a, 
-                        part_b: partCounts.part_b, 
-                        total_count: partCounts.total_count + 1
-                    })
-                }
-                
+                const countersCopy = [...counters];
+                countersCopy[index] += 1;
+                setCounters(countersCopy);
                 onDropped(dropResult.name)
-                console.log(partCounts)
-                // console.log(`You dropped ${item.name} into ${dropResult.name}`);
+                console.log(`You dropped ${item.name} into ${dropResult.name}`);
             }
         },
         collect: monitor => ({
